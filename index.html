@@ -1,0 +1,394 @@
+<!DOCTYPE html><html class="dark" lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EcoByte: Aventura RAEE Argentina</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Exo+2:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#A8F7C5",
+                    "secondary": "#66D6E3",
+                    "background": "#2F3330",
+                    "surface": "#2F3330",
+                    "surface-variant": "#4A5A46",
+                    "on-primary": "#00391d",
+                    "on-secondary": "#00363d",
+                    "on-surface": "#dee3ea",
+                    "on-surface-variant": "#c1c9be",
+                    "outline": "#8b9389",
+                    "outline-variant": "#414941",
+                    "error": "#ffb4ab",
+                    "warning": "#ffb869",
+                    "surface-container-lowest": "#0b0f0c",
+                    "surface-container-low": "#181d19",
+                    "surface-container": "#2F3330",
+                    "surface-container-high": "#363b36",
+                    "surface-container-highest": "#414941"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max": "1280px",
+                    "unit": "4px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline": ["Orbitron", "sans-serif"],
+                    "body": ["Exo 2", "sans-serif"],
+                    "mono": ["JetBrains Mono", "monospace"]
+            },
+            "fontSize": {
+                    "headline-sm": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-caps": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "fontWeight": "800"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.01em", "fontWeight": "900"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #2F3330;
+            color: #dee3ea;
+            overflow-x: hidden;
+            font-family: 'Exo 2', sans-serif;
+        }
+        h1, h2, h3, h4, .font-headline {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(168, 247, 197, 0.02), rgba(102, 214, 227, 0.01), rgba(168, 247, 197, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .glitch-border {
+            position: relative;
+        }
+        .glitch-border::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border: 1px solid #A8F7C5;
+            opacity: 0.4;
+            animation: pulse 3s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.01); opacity: 0.15; }
+            100% { transform: scale(1); opacity: 0.4; }
+        }
+        .clipped-corner {
+            clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+        }
+        .hero-glow {
+            text-shadow: 0 0 12px rgba(168, 247, 197, 0.5);
+        }
+        .tech-glow-blue {
+            text-shadow: 0 0 10px rgba(102, 214, 227, 0.4);
+        }
+    </style>
+</head>
+<body class="selection:bg-primary selection:text-on-primary" data-mode="connect">
+<div class="scanlines"></div>
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-40 bg-background/90 backdrop-blur-md border-b border-outline-variant h-16 flex items-center">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="font-headline text-2xl text-primary uppercase tracking-tighter flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">eco</span>
+            EcoByte
+        </div>
+<nav class="hidden md:flex gap-8 font-mono text-sm items-center">
+<a class="text-on-surface-variant hover:text-primary transition-all uppercase tracking-widest" href="#story" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">Story</a>
+<a class="text-on-surface-variant hover:text-primary transition-all uppercase tracking-widest" href="#mechanics">Characters</a>
+<a class="text-on-surface-variant hover:text-primary transition-all uppercase tracking-widest" href="#gameplay">Gameplay</a>
+<a class="text-on-surface-variant hover:text-primary transition-all uppercase tracking-widest" href="#map">Map</a>
+<button class="bg-primary text-on-primary px-6 py-2 clipped-corner font-bold hover:brightness-110 transition-all ml-4 uppercase tracking-tighter">Play Now</button>
+</nav>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Hero Image" class="w-full h-full object-cover brightness-[0.35] scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtLAtpYmdJtWktbqlW2Z3p4cakFeCEWkyHPOWmwO0GGNKCvz2pj7I_Ev_yz-tddEOP6LMkHoDIh21N_nT63ebk0D7lyq9aHufcFdO9YG_Mcz-epCJyRRm1P8bDGwxAyKa7EgrwEtfhNufazdXlGrO23Okl5raJaGB8J1GZ8H0fHUYGg0y5ydQDciQ_aqBdXnh0wNomC2KhOWNQWZtZcQmLAknDZHLyU2YHVf1fmXEqNm87_3m5s9z4c-tKP8_Cz11gyfNloaTMrNE" style="transform: scale(1.05) translateY(209.16px);">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+</div>
+<div class="relative z-10 text-center px-margin-mobile max-w-4xl">
+<div class="mb-4 inline-block px-4 py-1 border border-primary/40 bg-primary/5 backdrop-blur-sm">
+<p class="font-mono text-xs text-primary uppercase tracking-[0.2em]">Argentina 2060: El Despertar</p>
+</div>
+<h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-primary uppercase leading-none hero-glow mb-6">
+                SUMATE A ECOBYTE:<br><span class="text-secondary">AVENTURA RAEE ARGENTINA</span>
+</h1>
+<p class="text-lg text-on-surface-variant mb-10 max-w-2xl mx-auto font-body">
+                Salva el país en el año 2060. Convierte la basura electrónica en el motor del cambio. Una misión crítica te espera entre los escombros de la civilización digital.
+            </p>
+<div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+<button class="clipped-corner bg-primary text-on-primary font-headline text-xl px-12 py-4 hover:scale-105 transition-transform shadow-[0_0_20px_rgba(168,247,197,0.3)] uppercase" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                    JUGAR
+                </button>
+<button class="clipped-corner border border-secondary text-secondary font-headline text-xl px-10 py-3.5 hover:bg-secondary/10 transition-all uppercase" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                    TRAILER
+                </button>
+</div>
+</div>
+</section>
+<!-- Problem Section -->
+<section class="py-24 bg-surface-container-lowest border-y border-outline-variant relative overflow-hidden">
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -mr-48 -mt-48"></div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<div class="space-y-8">
+<div class="flex items-center gap-4 text-primary">
+<span class="h-[2px] w-12 bg-primary"></span>
+<p class="font-mono text-xs uppercase tracking-widest">Estado de Emergencia</p>
+</div>
+<h2 class="font-headline text-headline-lg-mobile md:text-3xl text-on-surface uppercase">UNA NACIÓN ENTERRADA EN SILICIO</h2>
+<p class="text-lg text-on-surface-variant font-body">
+                    En el año 2060, el excedente de Residuos de Aparatos Eléctricos y Electrónicos (RAEE) ha alcanzado niveles críticos. Argentina se enfrenta a un colapso ecológico silencioso liderado por metales pesados y circuitos obsoletos.
+                </p>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-6 bg-surface-container-high border border-outline-variant">
+<h3 class="font-headline text-2xl text-primary">+450k</h3>
+<p class="font-mono text-[10px] text-on-surface-variant uppercase tracking-tighter">Toneladas de RAEE anuales</p>
+</div>
+<div class="p-6 bg-surface-container-high border border-outline-variant">
+<h3 class="font-headline text-2xl text-error">95%</h3>
+<p class="font-mono text-[10px] text-on-surface-variant uppercase tracking-tighter">Sin tratamiento seguro</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant font-body">
+                    Tu misión es infiltrarte en los sectores industriales, recuperar componentes vitales y restaurar el ecosistema digital mediante la clasificación estratégica y el reciclaje de alta precisión.
+                </p>
+</div>
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/10 blur-xl group-hover:bg-primary/20 transition-all"></div>
+<div class="relative bg-surface-container p-2 border border-outline-variant">
+<div class="aspect-video bg-background relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[0.2]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfbpWgmvaXoS5W7utEZzD7FvNOxSdCiMkmVlMWfP06_1Ib00g-45t9zdOuJHCOE8zm0F0wmi0D57_PgU7XidLHpeLfjcPh-_EQNRZ-xV52uG0XWxIpcbbpPuAzuJa0YSIcKVyxj9ZT_dkwKvi2H6MpxU_ldOpbi0L3oB1Tlg-9mY42AvGaM63zGi4s1u_DZBAOS84CLstv2F_snS3t3hG5TTaM0iqWHbNfMWI1fr2dc0d6j_EkFF42vnQDWIzinIKo8ufckk4ijzw">
+<div class="absolute top-4 right-4 flex gap-2">
+<span class="bg-primary text-on-primary px-2 py-1 font-mono text-[10px] font-bold">ANALYZING...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Story/Characters Preview -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop" id="story">
+<div class="mb-16 text-center">
+<h2 class="font-headline text-headline-lg-mobile md:text-3xl text-secondary uppercase tracking-tighter tech-glow-blue">descripción del juego</h2>
+<div class="h-[3px] w-24 bg-secondary mx-auto mt-6"></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-7 relative">
+<div class="clipped-corner border border-outline-variant p-2 bg-surface-container-low">
+<img alt="Gameplay" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLcq6XTQx-3PwIHSbNTLjZofx3pAL357fp3sQgHxM90Rt8LU9tFPx4BfllHR9detG4aciWXAckj6n0rhOm-BVpoCSoT6hOK250xAwN1m6BB1M2qdHU-a7pN5g4W4tnpimUnSqGX2bd8WEGb04jkO3Rl6futim8PFn8KuL23t_7PaV0uHmyq06Foz7lDjeWbHUOaw_lF8SQzBNACdRKcUOM7d8lNPSpgx7ecQD4qy-AhexEbVIsIQGLa9U9OXXT0fWy8aNknmZxgdw">
+</div>
+<div class="absolute -bottom-6 p-6 bg-secondary text-on-secondary clipped-corner shadow-xl hidden md:block max-w-xs border border-white/10 -mr-48">
+<p class="font-mono text-[10px] font-bold mb-2 uppercase tracking-widest">vista previa nivel 1</p>
+<p class="text-sm font-body leading-tight">Identificación en tiempo real de componentes RAEE.&nbsp;</p>
+</div>
+</div>
+<div class="lg:col-span-5 flex flex-col justify-center space-y-6">
+<div class="p-6 border-l-2 border-primary bg-surface-container-high hover:bg-surface-variant/20 transition-colors"><h4 class="font-headline text-lg text-primary mb-2 uppercase">objetivo</h4><p class="text-on-surface-variant font-body">Recolectar todo el residuo electronico que se encuentran en los niveles con el fin de liMpiar el mapa argentino.</p></div>
+<div class="p-6 border-l-2 border-secondary bg-surface-container-high hover:bg-surface-variant/20 transition-colors">
+<h4 class="font-headline text-lg text-secondary mb-2 uppercase">microobjetivos</h4>
+<p class="text-on-surface-variant font-body">Pasar los niveles recogiendo todos los residuos.<br class="">Recolectar equipamiento.<br class="">Cuidar la barra de vida de los personajes.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Equipamiento y Gestión de Residuos Section -->
+<section class="py-24 bg-surface-container-lowest border-y border-outline-variant relative overflow-hidden" id="equipamiento">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-16">
+<p class="font-mono text-xs text-primary uppercase tracking-[0.2em] mb-2">Protocolos de Seguridad y Clasificación</p>
+<h2 class="font-headline text-headline-lg-mobile md:text-3xl text-primary uppercase">Equipamiento y Gestión de Residuos</h2>
+<div class="h-[3px] w-24 bg-primary mx-auto mt-6"></div>
+</div>
+<div class="grid grid-cols-1 gap-8 items-start"><div class="relative group w-full mb-8">
+<div class="absolute inset-0 bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="relative border border-outline-variant p-2 bg-surface-container clipped-corner overflow-hidden">
+<img alt="Gestión de Residuos RAEE" class="h-auto object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500 w-[85%] mx-auto block" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJH2CDJG9TRN4Qma-Wzq6TQVP0HF2a4hLO5Bap7qvW45QT_7YSe9pFEV8Xo5ExZVejrpEg3H8RJlEwJITh6TIquSkDmOW_dJtEFHtVY5Co-vRPixtxW6cOPi9J22dr77iEqtbydbtcf8VggGXXJ3bRlEg8w85nRtOV5Rzc5OYjvDxEjAsrpr9zC2uTQxio2CEctt2YfmtLfSOUnI8DAg2lxTKqD4dTwjBjqPMBjl0Lgh5uGIZlvtvBtSMbwaXI6lkHh3LsDY8D_MI">
+<div class="absolute inset-0 pointer-events-none border border-primary/20 opacity-50"></div>
+</div>
+<div class="mt-4 text-center font-mono text-[10px] text-primary uppercase tracking-widest opacity-60">Visualización de Sistema RAEE v4.2</div>
+</div>
+<!-- Left Column: Equipamiento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+<!-- Equipamiento -->
+<div class="space-y-6">
+<div class="bg-surface-container-high border-l-4 border-primary clipped-corner h-full p-4">
+<h3 class="font-headline text-lg text-primary uppercase flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-base">shield</span>
+Equipamiento de Seguridad
+</h3>
+<ul class="font-body text-on-surface-variant space-y-2 text-sm">
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Gafas de Seguridad</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Guantes Desechables Químicos</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Ropa de Protección</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Calzado de Seguridad</li>
+</ul>
+</div>
+</div>
+<!-- Reciclables -->
+<div class="space-y-6">
+<div class="p-6 bg-surface-container-high border-l-4 border-secondary clipped-corner h-full">
+<h3 class="font-headline text-lg text-secondary mb-4 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined">recycling</span>
+Residuos Reciclables
+</h3>
+<ul class="space-y-3 font-body text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> Notebook</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> Cables</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> Teléfono Celular</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> Monitor / Gabinete</li>
+</ul>
+</div>
+</div>
+<!-- Peligrosos -->
+
+</div>
+<!-- Center Column: Image -->
+
+<!-- Right Column: Residuos Peligrosos -->
+
+</div>
+</div>
+</section>
+<!-- Gameplay Mechanics -->
+<section class="py-24 bg-surface-container-low border-y border-outline-variant" id="gameplay">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div class="max-w-xl">
+<p class="font-mono text-xs text-primary uppercase tracking-[0.2em] mb-2">Protocolos de Acción</p>
+<h2 class="font-headline text-3xl text-on-surface uppercase">EL CICLO DE LA RECUPERACIÓN</h2>
+</div>
+<div class="flex gap-4">
+<button class="p-3 border border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary transition-colors" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<button class="p-3 border border-primary text-primary hover:bg-primary/5 transition-colors" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Step 1 -->
+<div class="group bg-surface-container-high p-8 border border-outline-variant relative hover:border-primary transition-all duration-300">
+<div class="absolute top-0 right-0 p-4 font-headline text-4xl text-primary/5 group-hover:text-primary/10 transition-colors">01</div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6" style="font-variation-settings: &quot;FILL&quot; 1;">explore</span>
+<h3 class="font-headline text-lg mb-4 uppercase">EXPLORACIÓN</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6">Recorre escenarios industriales post-apocalípticos en busca de depósitos de chatarra ocultos.</p>
+<div class="h-1 w-full bg-outline-variant">
+<div class="h-full bg-primary w-1/4"></div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="group bg-surface-container-high p-8 border border-outline-variant relative hover:border-secondary transition-all duration-300">
+<div class="absolute top-0 right-0 p-4 font-headline text-4xl text-secondary/5 group-hover:text-secondary/10 transition-colors">02</div>
+<span class="material-symbols-outlined text-4xl text-secondary mb-6" style="font-variation-settings: &quot;FILL&quot; 1;">biotech</span>
+<h3 class="font-headline text-lg mb-4 uppercase">IDENTIFICACIÓN</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6">Usa tu escáner térmico para detectar componentes valiosos entre los escombros peligrosos.</p>
+<div class="h-1 w-full bg-outline-variant">
+<div class="h-full bg-secondary w-2/4"></div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="group bg-surface-container-high p-8 border border-outline-variant relative hover:border-primary transition-all duration-300">
+<div class="absolute top-0 right-0 p-4 font-headline text-4xl text-primary/5 group-hover:text-primary/10 transition-colors">03</div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6" style="font-variation-settings: &quot;FILL&quot; 1;">category</span>
+<h3 class="font-headline text-lg mb-4 uppercase">CLASIFICACIÓN</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6">Categoriza según el protocolo RAEE: Placas madre, Baterías, CPUs y Periféricos.</p>
+<div class="h-1 w-full bg-outline-variant">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="group bg-surface-container-high p-8 border border-outline-variant relative hover:border-secondary transition-all duration-300">
+<div class="absolute top-0 right-0 p-4 font-headline text-4xl text-secondary/5 group-hover:text-secondary/10 transition-colors">04</div>
+<span class="material-symbols-outlined text-4xl text-secondary mb-6" style="font-variation-settings: &quot;FILL&quot; 1;">local_shipping</span>
+<h3 class="font-headline text-lg mb-4 uppercase">ENTREGA</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6">Transporta el material a los Puntos Limpios autorizados para ganar créditos y energía.</p>
+<div class="h-1 w-full bg-outline-variant">
+<div class="h-full bg-secondary w-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Map Section -->
+<section class="py-24 bg-background relative" id="map">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-16">
+<h2 class="font-headline text-headline-lg-mobile md:text-3xl text-primary uppercase">RED NACIONAL DE RECUPERACIÓN</h2>
+<p class="text-lg text-on-surface-variant font-body mt-4">Ubica los centros de reciclaje estratégicos distribuidos por todo el país.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant p-4 relative">
+<div class="relative z-10 w-full h-full min-h-[500px] flex items-center justify-center"><img alt="Mapa de Recuperación Argentina" class="w-full h-auto block shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXGAqFms7kAQyyovw5iKLQehHeAm2gNcm49PKiVk0PbtAqcsgxI7tzDatgrbDQ7_lY3-cEA4Fmgn4a3rlWvyN9pn8ko2td16WN-6QNCkElX-tlvktVLUbDw2eJGU-_RGOvqY3P-4jcbWH1p2JPRBlXDXriKod6MLSlqYxpAurnAtoPYDSit0a66wPRYk829mMKdH7di05q1ZuKPPPV4Bvf9Ux1d9Yx4dOh26TZ3vsp5v2rE4vSSCRK3T9t2idrO9z7liR1cNcMDVI"></div>
+</div>
+<div class="lg:col-span-4 space-y-4"><div class="p-5 bg-surface-container-high border border-outline-variant group hover:border-secondary transition-all"><h4 class="font-mono text-[10px] text-secondary uppercase tracking-widest mb-1">BUENOS AIRES</h4><p class="font-headline text-lg uppercase">Pelco S.A.</p><p class="text-xs text-on-surface-variant font-body mt-2">Puntos en Tigre y parques industriales de Quilmes.</p></div><div class="p-5 bg-surface-container-high border border-outline-variant group hover:border-primary transition-all"><h4 class="font-mono text-[10px] text-primary uppercase tracking-widest mb-1">SANTA FE</h4><p class="font-headline text-lg uppercase">Col. de Escribanos</p><p class="text-xs text-on-surface-variant font-body mt-2">Puntos fijos de recepción de dispositivos.</p></div><div class="p-5 bg-surface-container-high border border-outline-variant group hover:border-secondary transition-all"><h4 class="font-mono text-[10px] text-secondary uppercase tracking-widest mb-1">SALTA</h4><p class="font-headline text-lg uppercase">Reciclatón</p><p class="text-xs text-on-surface-variant font-body mt-2">Jornadas de recolección masiva para el NOA.</p></div><div class="p-5 bg-surface-container-high border border-outline-variant group hover:border-primary transition-all"><h4 class="font-mono text-[10px] text-primary uppercase tracking-widest mb-1">TUCUMÁN</h4><p class="font-headline text-lg uppercase">Electrogreen</p><p class="text-xs text-on-surface-variant font-body mt-2">Planta de recuperación de minerales críticos.</p></div><div class="p-5 bg-surface-container-high border border-outline-variant group hover:border-secondary transition-all"><h4 class="font-mono text-[10px] text-secondary uppercase tracking-widest mb-1">CÓRDOBA</h4><p class="font-headline text-lg uppercase">CTR Circunvalación</p><p class="text-xs text-on-surface-variant font-body mt-2">Centros de transferencia y Rancagua.</p></div><div class="p-5 bg-surface-container-high border border-outline-variant group hover:border-primary transition-all"><h4 class="font-mono text-[10px] text-primary uppercase tracking-widest mb-1">MENDOZA</h4><p class="font-headline text-lg uppercase">Puntos Limpios</p><p class="text-xs text-on-surface-variant font-body mt-2">Centros estratégicos en Guaymallén.</p></div></div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-32 relative overflow-hidden text-center bg-primary text-on-primary">
+<div class="absolute inset-0 bg-black/5"></div>
+<div class="relative z-10 max-w-3xl mx-auto px-margin-mobile">
+<h2 class="font-headline text-headline-lg-mobile md:text-headline-lg mb-8 font-black uppercase italic tracking-tight">EL FUTURO DE ARGENTINA ESTÁ EN TUS MANOS</h2>
+<div class="flex flex-wrap justify-center gap-6">
+<div class="flex items-center gap-6 mt-4 w-full justify-center"><a class="flex items-center gap-3 text-on-primary hover:text-white transition-colors group scale-110" href="#" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);"><img alt="Instagram" class="w-8 h-8 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBlYYS_dmUVy61BSNdhiAoNV-y2Na_QKt30YqHlzH4QclrOfmevT_6-e2cfDHDGoC7wHLTPiGAV6DG7rKki4JjbTTrfAAyR0ZxlYuRRZ7kzdx8b7ga2-JJhmwkBl-_cobT0z8PX0GMR39wu-VfZoR0AP7oBgvV1LodIzTsbw64OEXLRmRSo7jldq0hapJ-5fnpZeSd9tdu_y_QBNlRBgcRe66zIngg4u2hIxB-G5mzjear-FZr7EgCMuTexEjXu_LAhUzBhQas410"><span class="font-mono text-sm uppercase tracking-widest font-bold">somosecobyte</span></a><a class="flex items-center gap-3 text-on-primary hover:text-white transition-colors group scale-110" href="#" style="transition: 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);"><img alt="TikTok" class="w-8 h-8 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfc19WAcG9N1y9JCmMrvPJ7Ih6mEKYmEJEH6GOa1SP6v9Kb7s23fmuXPgEmOHNzNJgMYyNmc9l_oCdOQnKYq4fBg8KPaUJQBHZ13al6NcJctS0mPd5ZNOKqcYgdEmM0WSSxsKVDNHh9ZkBoUFjy--Zvp7eLRJpnCDtfp228Sqpg_8nGQYaWTQsBCDlwlTfek0drQJjgLgTrDkjRQdy1HAXVbAOYyQhhlVISXPZQOU0Lo_4OKhKPejjjdTLq5fCdpfjXAF7s8JznPc"><span class="font-mono text-sm uppercase tracking-widest font-bold">somosecobyte</span></a></div></div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest py-12 border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop gap-gutter max-w-container-max mx-auto">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="font-headline text-xl text-secondary uppercase font-bold tracking-tighter">EcoByte Argentina</div>
+<p class="font-mono text-[10px] text-on-surface-variant text-center md:text-left uppercase tracking-widest">©️ 2060 ECOBYTE ARGENTINA. ALL RIGHTS RESERVED. INDUSTRIAL SECTOR 7.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8 font-mono text-[11px] uppercase tracking-widest">
+</div>
+</div>
+</footer>
+<script>
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const heroImage = document.querySelector('section img');
+        if(heroImage) {
+            heroImage.style.transform = `scale(1.05) translateY(${scrolled * 0.12}px)`;
+        }
+    });
+
+    document.querySelectorAll('button, a').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            el.style.transition = 'all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+    });
+</script>
+
+
+</body></html>
